@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://c7ao2k1tb8p5g"]
+
+[ext_resource type="Shader" path="res://terrain_shader.gdshader" id="1_eu1l5"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_378i4"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_otrjw"]
+noise = SubResource("FastNoiseLite_378i4")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_eu1l5")
+shader_parameter/height_scale = 2.5
+shader_parameter/height_map = SubResource("NoiseTexture2D_otrjw")

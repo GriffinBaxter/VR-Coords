@@ -1,0 +1,78 @@
+[gd_scene load_steps=10 format=3 uid="uid://da57cmen1my6"]
+
+[ext_resource type="Shader" path="res://terrain_shader.gdshader" id="1_418ma"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_mnxee"]
+
+[sub_resource type="Sky" id="Sky_l7egl"]
+sky_material = SubResource("PhysicalSkyMaterial_mnxee")
+
+[sub_resource type="Environment" id="Environment_ky5kd"]
+background_mode = 2
+background_energy_multiplier = 4.0
+sky = SubResource("Sky_l7egl")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_nnruj"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_cj2fh"]
+noise = SubResource("FastNoiseLite_nnruj")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k27c4"]
+render_priority = 0
+shader = ExtResource("1_418ma")
+shader_parameter/height_scale = 2.5
+shader_parameter/height_map = SubResource("NoiseTexture2D_cj2fh")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gggd2"]
+material = SubResource("ShaderMaterial_k27c4")
+size = Vector2(25, 25)
+subdivide_width = 250
+subdivide_depth = 250
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_g4nwq"]
+
+[node name="View" type="Node3D"]
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="XROrigin3D"]
+transform = Transform3D(0.737899, -0.453327, 0.5, -0.0456312, 0.705633, 0.707107, -0.673367, -0.544589, 0.5, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="XROrigin3D"]
+environment = SubResource("Environment_ky5kd")
+
+[node name="DirectionLabels" type="Node3D" parent="XROrigin3D"]
+
+[node name="NorthLabel3D" type="Label3D" parent="XROrigin3D/DirectionLabels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -10)
+text = "NORTH"
+font_size = 257
+
+[node name="EastLabel3D" type="Label3D" parent="XROrigin3D/DirectionLabels"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 10, 1, 0)
+text = "EAST"
+font_size = 257
+
+[node name="WestLabel3D" type="Label3D" parent="XROrigin3D/DirectionLabels"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 1, 0)
+text = "WEST"
+font_size = 257
+
+[node name="SouthLabel3D" type="Label3D" parent="XROrigin3D/DirectionLabels"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, 10)
+text = "SOUTH"
+font_size = 257
+
+[node name="TerrainBottom" type="MeshInstance3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+mesh = SubResource("PlaneMesh_gggd2")
+
+[node name="TerrainTop" type="MeshInstance3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 8, 0)
+mesh = SubResource("PlaneMesh_gggd2")
+
+[node name="Platform" type="MeshInstance3D" parent="XROrigin3D"]
+mesh = SubResource("PlaneMesh_g4nwq")
