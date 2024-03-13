@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://da57cmen1my6"]
+[gd_scene load_steps=11 format=3 uid="uid://da57cmen1my6"]
 
 [ext_resource type="Shader" path="res://terrain_shader.gdshader" id="1_418ma"]
+[ext_resource type="Script" path="res://camera.gd" id="1_kmc3y"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_mnxee"]
 
@@ -37,6 +38,7 @@ subdivide_depth = 250
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 current = true
+script = ExtResource("1_kmc3y")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="XROrigin3D"]
 transform = Transform3D(0.737899, -0.453327, 0.5, -0.0456312, 0.705633, 0.707107, -0.673367, -0.544589, 0.5, 0, 0, 0)
