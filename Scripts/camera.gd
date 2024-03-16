@@ -3,10 +3,16 @@ extends XRCamera3D
 var capture_in_progress := false
 var frame_time: float
 var bvh_frames: PackedStringArray = []
+var bvh_string: String
 
 @onready var camera = $"."
 @onready
 var start_and_stop_button: Button = $"../../Control/MarginContainer/VBoxContainer/StartAndStop"
+@onready var file_dialog: FileDialog = $"../../FileDialog"
+
+
+func _ready() -> void:
+	file_dialog.filters = ["*.bvh ; BVH"]
 
 
 func _physics_process(delta: float) -> void:
@@ -25,15 +31,22 @@ func _physics_process(delta: float) -> void:
 					)
 				)
 			)
-	else:
-		if bvh_frames.size():
-			print(generate_bvh_string())
-			bvh_frames = []
+	elif bvh_frames.size():
+		bvh_string = generate_bvh()
+		bvh_frames = []
+		file_dialog.current_file = Time.get_datetime_string_from_system().replace(":", ".") + ".bvh"
+		file_dialog.visible = true
 
 
 func _on_start_and_stop_pressed() -> void:
 	capture_in_progress = !capture_in_progress
 	start_and_stop_button.text = "Stop and Save" if capture_in_progress else "Start Recording"
+
+
+func _on_file_dialog_file_selected(path: String) -> void:
+	var save_path = path if path.ends_with(".bvh") else path + ".bvh"
+	var save_file = FileAccess.open(save_path, FileAccess.WRITE)
+	save_file.store_string(bvh_string)
 
 
 func vector_to_bvh_format(vector: Vector3) -> String:
@@ -47,8 +60,8 @@ func join_by_comma(array: PackedStringArray) -> String:
 	return ", ".join(array)
 
 
-func generate_bvh_string() -> String:
-	var bvh_string := ""
+func generate_bvh() -> String:
+	var bvh := ""
 	for string: String in [
 		"HIERARCHY",
 		"ROOT Point",
@@ -65,5 +78,5 @@ func generate_bvh_string() -> String:
 		"Frame Time: " + "%.6f" % frame_time,
 		"\n".join(bvh_frames)
 	]:
-		bvh_string += string + "\n"
-	return bvh_string
+		bvh += string + "\n"
+	return bvh

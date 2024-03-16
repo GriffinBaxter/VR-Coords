@@ -98,4 +98,12 @@ layout_mode = 2
 layout_mode = 2
 text = "Start Recording"
 
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Save Recording"
+initial_position = 2
+size = Vector2i(800, 500)
+access = 2
+use_native_dialog = true
+
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/StartAndStop" to="XROrigin3D/XRCamera3D" method="_on_start_and_stop_pressed"]
+[connection signal="file_selected" from="FileDialog" to="XROrigin3D/XRCamera3D" method="_on_file_dialog_file_selected"]
