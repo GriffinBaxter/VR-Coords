@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://da57cmen1my6"]
 
 [ext_resource type="Shader" path="res://terrain_shader.gdshader" id="1_418ma"]
-[ext_resource type="Script" path="res://camera.gd" id="1_kmc3y"]
+[ext_resource type="Script" path="res://Scripts/camera.gd" id="1_kmc3y"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_mnxee"]
 
