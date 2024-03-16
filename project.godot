@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="VR Coords"
-run/main_scene="res://view.tscn"
+run/main_scene="res://Scenes/view.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 
 [display]

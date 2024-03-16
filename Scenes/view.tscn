@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://da57cmen1my6"]
 
-[ext_resource type="Shader" path="res://terrain_shader.gdshader" id="1_418ma"]
-[ext_resource type="Script" path="res://Scripts/camera.gd" id="1_kmc3y"]
+[ext_resource type="Script" path="res://Scripts/camera.gd" id="1_t4ae7"]
+[ext_resource type="Shader" path="res://terrain_shader.gdshader" id="2_3fpyp"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_mnxee"]
 
@@ -20,7 +20,7 @@ noise = SubResource("FastNoiseLite_nnruj")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k27c4"]
 render_priority = 0
-shader = ExtResource("1_418ma")
+shader = ExtResource("2_3fpyp")
 shader_parameter/height_scale = 2.5
 shader_parameter/height_map = SubResource("NoiseTexture2D_cj2fh")
 
@@ -38,7 +38,7 @@ subdivide_depth = 250
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 current = true
-script = ExtResource("1_kmc3y")
+script = ExtResource("1_t4ae7")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="XROrigin3D"]
 transform = Transform3D(0.737899, -0.453327, 0.5, -0.0456312, 0.705633, 0.707107, -0.673367, -0.544589, 0.5, 0, 0, 0)
@@ -78,3 +78,24 @@ mesh = SubResource("PlaneMesh_gggd2")
 
 [node name="Platform" type="MeshInstance3D" parent="XROrigin3D"]
 mesh = SubResource("PlaneMesh_g4nwq")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+offset_right = 117.0
+offset_bottom = 66.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
+layout_mode = 2
+
+[node name="StartAndStop" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start Recording"
+
+[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/StartAndStop" to="XROrigin3D/XRCamera3D" method="_on_start_and_stop_pressed"]

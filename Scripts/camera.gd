@@ -1,26 +1,18 @@
 extends XRCamera3D
 
-var capture_complete := false
-var capture_in_progress := true
+var capture_in_progress := false
 var frame_time: float
 var bvh_frames: PackedStringArray = []
 
 @onready var camera = $"."
-
-
-func _ready() -> void:
-	await get_tree().create_timer(1).timeout
-
-	capture_complete = true
+@onready
+var start_and_stop_button: Button = $"../../Control/MarginContainer/VBoxContainer/StartAndStop"
 
 
 func _physics_process(delta: float) -> void:
 	if capture_in_progress:
 		if !frame_time:
 			frame_time = delta
-		if capture_complete:
-			capture_in_progress = false
-			print(generate_bvh_string())
 		else:
 			(
 				bvh_frames
@@ -33,6 +25,15 @@ func _physics_process(delta: float) -> void:
 					)
 				)
 			)
+	else:
+		if bvh_frames.size():
+			print(generate_bvh_string())
+			bvh_frames = []
+
+
+func _on_start_and_stop_pressed() -> void:
+	capture_in_progress = !capture_in_progress
+	start_and_stop_button.text = "Stop and Save" if capture_in_progress else "Start Recording"
 
 
 func vector_to_bvh_format(vector: Vector3) -> String:
