@@ -1,14 +1,17 @@
 extends XRCamera3D
 
+const CAPTURE_DURATION = 4.75
+
+var waiting_to_capture := false
 var capture_in_progress := false
 var frame_time: float
 var bvh_frames: PackedStringArray = []
 var bvh_string: String
 
 @onready var camera = $"."
-@onready
-var start_and_stop_button: Button = $"../../Control/MarginContainer/VBoxContainer/StartAndStop"
+@onready var start_button: Button = $"../../Control/MarginContainer/VBoxContainer/StartButton"
 @onready var file_dialog: FileDialog = $"../../FileDialog"
+@onready var beep: AudioStreamPlayer = $"../../BeepAudio"
 
 
 func _ready() -> void:
@@ -38,9 +41,20 @@ func _physics_process(delta: float) -> void:
 		file_dialog.visible = true
 
 
-func _on_start_and_stop_pressed() -> void:
-	capture_in_progress = !capture_in_progress
-	start_and_stop_button.text = "Stop and Save" if capture_in_progress else "Start Recording"
+func _on_start_button_pressed() -> void:
+	if !waiting_to_capture and !capture_in_progress:
+		waiting_to_capture = true
+		await get_tree().create_timer(3).timeout
+
+		beep.play()
+		waiting_to_capture = false
+		capture_in_progress = !capture_in_progress
+		start_button.text = "Capture in Progress"
+		await get_tree().create_timer(CAPTURE_DURATION).timeout
+
+		beep.play()
+		capture_in_progress = !capture_in_progress
+		start_button.text = "Start Recording"
 
 
 func _on_file_dialog_file_selected(path: String) -> void:

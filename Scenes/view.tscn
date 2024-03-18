@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://da57cmen1my6"]
+[gd_scene load_steps=12 format=3 uid="uid://da57cmen1my6"]
 
 [ext_resource type="Script" path="res://Scripts/camera.gd" id="1_t4ae7"]
 [ext_resource type="Shader" path="res://terrain_shader.gdshader" id="2_3fpyp"]
+[ext_resource type="AudioStream" uid="uid://cf4y0fuy5yok" path="res://beep.mp3" id="3_lglv4"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_mnxee"]
 
@@ -88,13 +89,14 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Control"]
+layout_mode = 0
 offset_right = 117.0
 offset_bottom = 66.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
 layout_mode = 2
 
-[node name="StartAndStop" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+[node name="StartButton" type="Button" parent="Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Start Recording"
 
@@ -105,5 +107,8 @@ size = Vector2i(800, 500)
 access = 2
 use_native_dialog = true
 
-[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/StartAndStop" to="XROrigin3D/XRCamera3D" method="_on_start_and_stop_pressed"]
+[node name="BeepAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_lglv4")
+
+[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/StartButton" to="XROrigin3D/XRCamera3D" method="_on_start_button_pressed"]
 [connection signal="file_selected" from="FileDialog" to="XROrigin3D/XRCamera3D" method="_on_file_dialog_file_selected"]
