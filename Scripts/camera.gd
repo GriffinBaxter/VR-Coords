@@ -1,7 +1,6 @@
 extends XRCamera3D
 
-const CAPTURE_DURATION = 4.75
-
+var interface: XRInterface
 var waiting_to_capture := false
 var capture_in_progress := false
 var frame_time: float
@@ -15,6 +14,9 @@ var bvh_string: String
 
 
 func _ready() -> void:
+	interface = XRServer.find_interface("OpenXR")
+	if interface and interface.is_initialized():
+		get_viewport().use_xr = true
 	file_dialog.filters = ["*.bvh ; BVH"]
 
 
@@ -44,15 +46,14 @@ func _physics_process(delta: float) -> void:
 func _on_start_button_pressed() -> void:
 	if !waiting_to_capture and !capture_in_progress:
 		waiting_to_capture = true
+		start_button.text = "Recording in 3 seconds... (sound will play once started)"
 		await get_tree().create_timer(3).timeout
 
 		beep.play()
 		waiting_to_capture = false
 		capture_in_progress = !capture_in_progress
-		start_button.text = "Capture in Progress"
-		await get_tree().create_timer(CAPTURE_DURATION).timeout
-
-		beep.play()
+		start_button.text = "Capture in Progress... (press to stop)"
+	elif !waiting_to_capture and capture_in_progress:
 		capture_in_progress = !capture_in_progress
 		start_button.text = "Start Recording"
 
